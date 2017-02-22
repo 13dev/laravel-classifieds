@@ -34,6 +34,8 @@ Route::post('password/reset', 'Auth\PasswordController@reset');
 
 Route::group(['middleware' => ['auth', 'authorize']], function(){
     Route::get('admin', 'Admin\AdminController@index');
+    Route::get('admin','Admin\UsersController@getUsers');
+
 });
 
 
