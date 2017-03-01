@@ -21,8 +21,10 @@ class CreateItemsTable extends Migration
                     ->onDelete('cascade');
             $table->string('titulo');
             $table->text('descricao');
-            $table->string('slug',300);
+            $table->integer('category_id');
+            $table->string('slug', 300);
             $table->timestamps();
+
 
         });
     }

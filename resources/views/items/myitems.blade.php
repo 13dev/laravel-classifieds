@@ -22,8 +22,8 @@
                         @foreach($items as $item)
                         <tr>
                             <td class="hidden-xs">{{ $item->id }} </td>
-                            <td>{{ ucfirst($item->titulo) }}</td>
-                            <td>{{ $item->descricao }}</td>
+                            <td>{{ str_limit(ucfirst($item->titulo),30) }}</td>
+                            <td>{{ str_limit($item->descricao, 70) }}</td>
                             <td>{{ $item->category->title }}</td>
                         </tr>
                         @endforeach

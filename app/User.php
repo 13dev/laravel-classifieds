@@ -3,16 +3,14 @@
 namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Zizaco\Entrust\Traits\EntrustUserTrait;
 use Illuminate\Notifications\Notifiable;
 
 
 class User extends Authenticatable 
 {
 
-    use EntrustUserTrait,Notifiable;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -55,11 +53,9 @@ class User extends Authenticatable
         $this->attributes['password'] = $password;
     }
 
-    public function item()
+    public function items()
     {
         return $this->hasMany('App\Item');
     }
-
-
 
 }

@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>@yield('titulo') - Vendas Madeira</title>
-
     <!-- Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
     
@@ -39,7 +38,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8">
-            <img id="logotipo" src="http://lorempixel.com/300/70/" alt="Logotipo Madeira Vendas"><BR>
+            <img id="logotipo" src="#" alt="Logotipo Madeira Vendas"><BR>
             <span id="slogan">PUBLIQUE AQUI É GRATIS</span>
         </div>
         <div class="col-md-4">
@@ -76,6 +75,7 @@
                     <li><a href="{{ url('/') }}">HOME</a></li>
                 </ul>
 
+                
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Authentication Links -->
@@ -83,7 +83,7 @@
                         <li><a href="{{ url('/login') }}">ENTRAR</a></li>
                         <li><a href="{{ url('/register') }}">REGISTAR-ME</a></li>
                     @else
-                    <li><a href="{{ url('/a/criar/anuncio') }}">PUBLICAR ANÚNCIO</a></li>
+                    <li><a href="{{ url('/a/add/item') }}">PUBLICAR ANÚNCIO</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 {{ Auth::user()->name }} <span class="caret"></span>
@@ -92,7 +92,9 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ url('/u/'.Auth::user()->name) }}"><i class="fa fa-btn fa-eye"></i>Ver perfil</a></li>
                                 <li><a href="{{ url('/perfil') }}"><i class="fa fa-btn fa-wrench"></i>Editar Perfil</a></li>
-                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
+                                <li><a href="{{ url('/a/view/myitems') }}"><i class="fa fa-btn fa-wrench"></i>Meus anuncios</a></li>
+                                <li><a href="{{ url('/m/') }}"><i class="fa fa-btn fa-envelope"></i>Mensagens</a></li>
+                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Sair</a></li>
                             </ul>
                         </li>
                     @endif

@@ -17,7 +17,9 @@ class CategoriesController extends Controller
      */
     public function manageCategory(Category $category)
     {
-        $allCategories = $category->getAllChilds(0);
+        Cache::add('category-getallChilds', $category->getAllChilds(0), 180);
+        $allCategories = Cache::get('category-getallChilds');
+        
         $allCategoriesSelect = [];
         foreach ($allCategories as $key => $value) {
             $allCategoriesSelect[$key]['title'] = $value->title;

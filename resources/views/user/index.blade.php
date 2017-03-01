@@ -14,8 +14,8 @@
 <h1>Anúncios:</h1>
 <hr>
 
-<div class="itens">
-	@foreach($user->item as $item)
+<div class="items">
+	@foreach($user->items as $item)
 	
 		<span class="id">ID: <a href="/a/{{ $item->slug }}">{{ $item->id }}</a></span><br>
 		<span class="titulo">Titulo: {{ $item->titulo }}</span><br>
