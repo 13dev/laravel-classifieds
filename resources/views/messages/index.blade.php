@@ -101,7 +101,7 @@
                     var token, url, data;
 
                     token = $('input[name=_token]').val();
-                            url = '{{ url(' / m / inbox') }}';
+                            url = "{{ url('/m/inbox') }}";
                     $.ajax({
                         url: url,
                         headers: {'X-CSRF-TOKEN': token},
@@ -171,7 +171,7 @@
                     var token, url, data;
 
                     token = $('input[name=_token]').val();
-                    url = '{{ url(' / m / send / ') }}';
+                    url = "{{ url('/m/send/') }}";
                     $.ajax({
                         url: url,
                         headers: {'X-CSRF-TOKEN': token},
@@ -197,7 +197,7 @@
                     var token, url, data;
 
                     token = $('input[name=_token]').val();
-                            url = '{{ url(' / m / show') }}';
+                            url = "{{ url('/m/show') }}";
                     $.ajax({
                         url: url,
                         headers: {'X-CSRF-TOKEN': token},
