@@ -3,154 +3,138 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use Auth;
 use App\User;
 use Talk;
 use Carbon\Carbon;
 
+class MessagesController extends Controller {
 
-class MessagesController extends Controller
-{
+    public function __construct() {
+        $this->middleware('auth');
+        Carbon::setLocale('pt');
+    }
 
-	public function __construct()
-	{
-		$this->middleware('auth');
-		Carbon::setLocale('pt');
+    public function index() {
+        return view('messages.index');
+    }
 
-	}
+    public function Send(request $request) {
+        /**
+         * Set The Auth User
+         */
+        Talk::setAuthUserId(Auth::user()->id);
 
-	public function index() {
-		return view('messages.index');
-	}
+        $convId = $request->input('conv_id');
+        $mensagem = $request->input('mensagem');
+        $response = new \stdClass();
 
-	
-	public function Send(request $request) {
-		/**
-		 * Set The Auth User
-		 */
-		Talk::setAuthUserId(Auth::user()->id);
+        if (!Talk::getConversationsById($convId)) {
+            unset($response);
+            $response->response = false;
+            $response->error = 'Nº Codigo: 2. Esta conversa não existe!';
+            return response()->json($response);
+        }
 
-		$convId = $request->input('conv_id');
-		$mensagem = $request->input('mensagem');
+        if (!$request->ajax()) {
+            unset($response);
+            $response->response = false;
+            $response->error = 'Nº Codigo: 2. Não podes acessar acessar este arquivo diretamente';
+            return response()->json($response);
+        }
 
-		if(!Talk::getConversationsById($convId)){
-			$response->response 	= false;
-			$response->error		= 'Nº Codigo: 2. Esta conversa não existe!'; 
-			return response()->json($response);
-		}
+        $response->code = Talk::sendMessage($convId, trim(htmlspecialchars($mensagem)));
 
-		if(!$request->ajax()){
-			$response->response 	= false;
-			$response->error 	= 'Nº Codigo: 2. Não podes acessar acessar este arquivo diretamente';
-			return response()->json($response);
-		}
+        if (!$response->code) {
+            $response->response = false;
+            $response->error = 'Nº Codigo: 1. Ocorreu um erro Por favor contacte a administração do site';
+            return response()->json($response);
+        }
+        $response->response = true;
 
-		$response = Talk::sendMessage($convId, trim(htmlspecialchars($mensagem)));
-		
-		if (!$response){
-			$response->response 	= false;
-			$response->error 		= 'Nº Codigo: 1. Ocorreu um erro Por favor contacte a administração do site';
-			return response()->json($response);
-		}
+        return response()->json($response);
+    }
 
-		$response->response = true;
-		
-		return response()->json($response);
-	}
+    public function getInbox(request $request) {
+        /**
+         * Set The Auth User
+         */
+        Talk::setAuthUserId(Auth::user()->id);
+        $response = new \stdClass();
+        $response->code = Talk::getInbox();
 
+        foreach ($response->code as $key => $value) {
+            $response->code[$key]->thread->time = Carbon::parse($value->thread->created_at)->diffForHumans();
+        }
 
-	public function getInbox(request $request) 
-	{
-		/**
-		 * Set The Auth User
-		 */
-		Talk::setAuthUserId(Auth::user()->id);
+        if (!$response) {
+            unset($response);
+            $response->response = false;
+            $response->error = 'Nº Codigo: 1. Ocorreu um erro Por favor contacte a administração do site';
+            return response()->json($response);
+        }
 
-		$response = Talk::getInbox();
+        if (!$request->ajax()) {
+            unset($response);
+            $response->response = false;
+            $response->error = 'Nº Codigo: 2. Não podes acessar acessar este arquivo diretamente';
+            return response()->json($response);
+        }
 
-		foreach ($response as $key => $value) {
-			$response[$key]->thread->time = Carbon::parse($value->thread->created_at)->diffForHumans();
+        $response->response = true;
+        return response()->json($response/* ,200,[], JSON_PRETTY_PRINT */);
+    }
 
-		}
+    /**
+     * Obtem as conversas da conversa selecionada
+     * @param  Request $request pedido
+     * @param  int  $convId conversa id
+     * @return json          return json 
+     */
+    public function getChat(Request $request) {
+        /**
+         * Set The Auth User
+         */
+        Talk::setAuthUserId(Auth::user()->id);
 
-		if (!$response){
-			unset($response);
-			$response = new \stdClass();
-			$response->response = false;
-			$response->error 	= 'Nº Codigo: 1. Ocorreu um erro Por favor contacte a administração do site';
-			return response()->json($response);
-		}
+        $convId = $request->input('conv_id');
+        $response = new \stdClass();
+        
+        if (!$request->ajax()) {
+            unset($response);
+            $response->response = false;
+            $response->error = 'Nº Codigo: 3. Não podes acessar acessar este arquivo diretamente';
+            return response()->json($response);
+        }
+        
+        if (!Talk::getConversationsById($convId) || !is_numeric($convId) || empty($convId)) {
+            unset($response);
+            $response->response = false;
+            $response->error = 'Nº Codigo: 2. Esta conversa não existe!';
+            return response()->json($response);
+        }
 
-		if(!$request->ajax()){
-			unset($response);
-			$response = new \stdClass();
-			$response->response = false;
-			$response->error 	= 'Nº Codigo: 2. Não podes acessar acessar este arquivo diretamente';
-			return response()->json($response);
-		}
+        if (!Talk::isAuthenticUser($convId, Auth::user()->id)) {
+            $response->response = false;
+            $response->error = 'Nº Codigo: 1. Não podes ver esta conversa!';
+            return response()->json($response);
+        }
 
-		$response->response = true;
+        $response->code = Talk::getConversationsById($convId);
 
-		return response()->json($response/*,200,[], JSON_PRETTY_PRINT*/);
+        foreach ($response->code->messages as $key => $value) {
 
-	}
-	/**
-	 * Obtem as conversas da conversa selecionada
-	 * @param  Request $request pedido
-	 * @param  int  $convId conversa id
-	 * @return json          return json 
-	 */
-	public function getChat(Request $request)
-	{
-		/**
-		 * Set The Auth User
-		 */
-		Talk::setAuthUserId(Auth::user()->id);
+            if ($response->code->messages[$key]->user_id == Auth::user()->id) {
+                $response->code->messages[$key]->me = true;
+            } else {
+                $response->code->messages[$key]->me = false;
+            }
+            //$response->messages[$key]->me = Carbon::createFromFormat('d/m/Y h:i:s', $response->messages[$key]->created_at); 
+        }
 
-		$convId = $request->input('conv_id');
+        $response->response = true;
+        return response()->json($response);
+    }
 
-		if(!$request->ajax()){
-			unset($response);
-			$response = new \stdClass();
-			$response->response 	= false;
-			$response->error 		= 'Nº Codigo: 3. Não podes acessar acessar este arquivo diretamente';
-			return response()->json($response);
-		}
-
-		if(!Talk::getConversationsById($convId) || !is_numeric($convId) || empty($convId)){
-			unset($response);
-			$response = new \stdClass();
-			$response->response 	= false;
-			$response->error		= 'Nº Codigo: 2. Esta conversa não existe!'; 
-			return response()->json($response);
-		}
-
-		if(!Talk::isAuthenticUser($convId, Auth::user()->id)){
-			$response = new \stdClass();
-			$response->response 	= false;
-			$response->error		= 'Nº Codigo: 1. Não podes ver esta conversa!';
-			return response()->json($response);
-		}
-
-		$response = Talk::getConversationsById($convId);
-
-		foreach ($response->messages as $key => $value) {
-
-			if ($response->messages[$key]->user_id == Auth::user()->id) {
-				$response->messages[$key]->me = true;
-			}else {
-				$response->messages[$key]->me = false;
-			}
-			//$response->messages[$key]->me = Carbon::createFromFormat('d/m/Y h:i:s', $response->messages[$key]->created_at); 
-
-		} 
-
-		$response->response = true;
-		return response()->json($response);
-	}
-
-
-	
 }
