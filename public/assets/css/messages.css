@@ -3,22 +3,26 @@
 .a-none:hover,
 .a-none:active,
 .a-none:focus {
-	color: inherit; /* blue colors for links too */
+    color: inherit; /* blue colors for links too */
     text-decoration: inherit; /* no underline */
-   
+
 }
 
 .toRight {
-	display: inline-block;
-  	float: right;
+    display: inline-block;
+    float: right;
 }
 
 .content-media {
-	margin-top: 5px;
+    margin-top: 5px;
 }
 .person-image {
-	border-radius:50%;
-	border:1px solid;
+    border-radius:50%;
+    border:1px solid;
+    min-width: 50px;
+    min-height: 50px;
+    max-width: 50px;
+    max-height: 50px;
 }
 .person {
     border-style: none;
@@ -29,8 +33,8 @@
 }
 .person:hover {
     cursor: pointer;
-	 background-color: rgba(16, 93, 209, 0.14);
-     
+    background-color: rgba(16, 93, 209, 0.14);
+
 }
 
 ::-webkit-scrollbar {
@@ -44,10 +48,10 @@
 }
 
 .pessoas {
-    max-height: 479px;
+    max-height: 480px;
     overflow-y: scroll;
-    height: 479px;
-    min-height: 479px;
+    height: 480px;
+    min-height: 480px;
     margin-bottom: 0px;
 }
 
@@ -74,24 +78,8 @@
     -webkit-border-radius: 500px;
     -moz-border-radius: 500px;
     border-radius: 500px;
+    max-width: 600px;
 
-    /*
-    position: relative;
-    float:right!important;
-    width: auto;
-    min-height: 40px;
-    height:auto;
-    background: #0B93F6;
-    -webkit-border-radius: 80px;
-    -moz-border-radius: 80px;
-    border-radius: 80px;
-    padding: 10px;
-    color: #FFF;
-    font-size: 14px;
-    display: block;
-    margin-right: 10px;
-    margin-top: 30px;
-    clear: right; */
 }
 
 .bubble-you {
@@ -117,40 +105,23 @@
     -webkit-border-radius: 500px;
     -moz-border-radius: 500px;
     border-radius: 500px;
-    /*
-    position: relative;
-    width: auto;
-    min-height: 40px;
-    height: auto;
-    background: #E1E1E1;
-    -webkit-border-radius: 80px;
-    -moz-border-radius: 80px;
-    border-radius: 80px;
-    padding: 10px;
-    color: #5C5C5C;
-    font-size: 14px;
-    display: block;
-    margin-top: 30px;
-    padding-left: 20px;
-    padding-right: 20px;
-    margin-left: 10px;
-    float: left;
-    clear: left; */
+    max-width: 600px;
 }
-#messages .start-image {
+.messages .start-image {
     display: block;
     margin: 50px auto 0px;
     opacity: 0.4;
 }
-#messages {
+.messages {
     max-height: 435px;
     min-height: 435px;
 }
-.messages {
+#messages {
     white-space: pre-line;
     max-height: 435px;
     min-height: 435px;
     overflow-y: scroll;
+    border-right: 2px solid #E6E6E6;
 }
 .chat-header {
     height: 45px;
@@ -163,14 +134,8 @@
     box-shadow: 0 5px 4px RGBA(156, 156, 156, 0.17);
 }
 .all-chat {
-    border: 2px solid #E6E6E6;
-    border-radius: 5px;
-    border-bottom-style: none;
-    padding:0;
-    max-height: 480px;
-    border-bottom-left-radius: 0px;
-    border-top-left-radius: 0px;
-    border-left-style: none;
+    padding: 0;
+    max-height: 435px;
 }
 .all-persons {
     border: 2px solid #E6E6E6;
@@ -184,15 +149,15 @@
     border-left-style: none;
 }
 #search-conversations {
-    border-style: none;
-    border-bottom:1px solid #E6E6E6;
-    border-bottom-right-radius: 0px;
-    border-bottom-left-radius: 0px;
-
+border-style: none;
+border-bottom: 2px solid #E6E6E6;
+min-height: 45px;
+border-radius: 0;
 }
+
 .loading-chat {
 
-   
+
 }
 #loading {
     display: none;
@@ -220,4 +185,20 @@
 }
 .list-group-item {
     margin-bottom: 0px;
+}
+#enviar-mensagem {
+    min-height: 49px;
+    border-radius: 0;
+    border-right: 2px solid #E6E6E6;
+    border-bottom: 2px solid #E6E6E6;
+}
+#input-mensagem {
+    min-height: 49px;
+    border-radius: 0;
+    border-left: 0;
+}
+.inputs {
+    position: absolute;
+    top: 480px;
+    width: 100%;
 }
