@@ -5,6 +5,7 @@
 
 @section('content')
 <div class="row">
+    
     <div id="warnings"></div>
     <div class="col-md-4 all-persons">
         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
@@ -31,25 +32,24 @@
                 </div>
             </div>
 
-            <div id="messages">
-                <div class="messages">
+            <div class="messages">
+                <div id="messages">
                     <img class="start-image" src="{{ url('/assets/img/conversation.png') }}" width="300" alt="Escolhe uma conversa!">
                     <h3 style="opacity:0.4;text-align:center;"> Escolhe uma conversa :) </h3>
-                </div>		
-            </div>
-
-            <div class="inputs">
+                </div>	
+                <div class="inputs">
                 <div class="input-group">
                     <input type="text" id="input-mensagem" class="form-control" placeholder="Search for...">
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" id="enviar-mensagem">Go!</button>
+                        <button class="btn btn-default" type="button" id="enviar-mensagem">Enviar!</button>
                     </span>
                 </div>
             </div>
-
+            </div>
         </div>
     </div>
 </div>
+<div style="height: 50px;"></div>
 </div>
 @endsection
 
@@ -67,7 +67,7 @@
                     $('#message').remove();
                 });
             }, 2200);
-    }
+        }
     }
     function redirect(url) {
         return $(location).attr('href', '{{ url("' + url + '") }}');
@@ -106,7 +106,7 @@
                 $.each(response.code, function (key, value) {
                     var media = $("<div/>", {"class": "media"});
                     var div_image = $("<div/>", {"class": "pull-left"});
-                    var image = $("<img/>", {"alt": "" + value.withUser.username + "", "class": "media-object person-image", "width": "45", "src": "http://lorempixel.com/64/64/"});
+                    var image = $("<img/>", {"alt": "" + value.withUser.username + "", "class": "media-object person-image", "src": "#"});
                     var media_body = $("<div/>", {"class": "media-body"});
                     var content_media = $("<div/>", {"class": "content-media"});
                     var tempo = $("<span/>", {"class": "time pull-right", "text": "" + value.thread.time + ""});
@@ -228,8 +228,8 @@
             if (mensagem !== "" && $convId !== "") {
                 setMessage($convId, mensagem);
                 $('#input-mensagem').val("");
-                getChat($convId, 0);
-                getConversas(0);
+                getChat($convId);
+                getConversas();
             }
         });
     });
