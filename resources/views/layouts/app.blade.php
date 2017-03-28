@@ -35,6 +35,19 @@
     </style>
     @yield('extra-style')
 </head>
+<?php
+$count = 0;
+if(!Auth::guest()){
+    Nahid\Talk\Facades\Talk::setAuthUserId(Auth::user()->id);
+    
+    foreach(Nahid\Talk\Facades\Talk::getInbox() as $m){
+        if($m->thread->is_seen == 0 && $m->thread->user_id != Auth::user()->id){
+           $count++;
+        }
+    } 
+}
+
+?>
 <body id="app-layout">
 <div class="container">
     <div class="row">
@@ -66,35 +79,38 @@
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    BASEAPP
+                    VENDAS MADEIRA
                 </a>
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/') }}">HOME</a></li>
+                    <li><a href="{{ url('/') }}">INÍCIO</a></li>
                 </ul>
 
-                
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Authentication Links -->
                     @if (Auth::guest())
+
                         <li><a href="{{ url('/login') }}">ENTRAR</a></li>
                         <li><a href="{{ url('/register') }}">REGISTAR-ME</a></li>
+                        
                     @else
+
+
                     <li><a href="{{ url('/a/add/item') }}">PUBLICAR ANÚNCIO</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                {{ Auth::user()->name }} <span class="caret"></span>
+                                {{ Auth::user()->name }}<span class="caret"></span>
                             </a>
 
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ url('/u/'.Auth::user()->name) }}"><i class="fa fa-btn fa-eye"></i>Ver perfil</a></li>
                                 <li><a href="{{ url('/perfil') }}"><i class="fa fa-btn fa-wrench"></i>Editar Perfil</a></li>
                                 <li><a href="{{ url('/a/view/myitems') }}"><i class="fa fa-btn fa-wrench"></i>Meus anuncios</a></li>
-                                <li><a href="{{ url('/m/') }}"><i class="fa fa-btn fa-envelope"></i>Mensagens</a></li>
+                                <li><a href="{{ url('/m/') }}"><i class="fa fa-btn fa-envelope"></i>Mensagens <span class="badge"> {{ $count }}</span></a></li>
                                 <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Sair</a></li>
                             </ul>
                         </li>
@@ -104,12 +120,24 @@
         </div>
     </nav>
 <div class="container">
+    @if($count > 0)
+<div class="alert alert-success">
+    @if($count == 1)
+    <strong>Nova Mensagem</strong> 
+    @else
+    <strong>Novas Mensagens</strong> 
+    @endif
+    Reveja a aba 'Mensagens' para ver as suas novas mensagens!
+</div>
+@endif
     @yield('content')
 </div>
+    <footer>
+        @yield('footer')
+    </footer>
     <!-- JavaScripts -->
     <script src="{{ URL::asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ URL::asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/js/Helpers.js') }}"></script>
     @yield('extra-script')
 </body>
 </html>

@@ -56,6 +56,27 @@
 
 @section('extra-script')
 <script>
+    $blink = true;
+    function blinkBackground(conv_id = null){
+            $delay = setTimeout(function () {
+                if($blink){
+                    $('.person[data-conv='+conv_id+']').addClass('active');
+                }
+            }, 2200);
+            $delay1 = setTimeout(function () {
+                if($blink){
+                    $('.person[data-conv='+conv_id+']').removeClass('active');
+                    blinkBackground(conv_id);
+                }
+            }, 4200);
+
+            if(!$blink){
+                clearTimeout($delay);
+                clearTimeout($delay1);
+            }
+            
+            
+    }
 
     function message(message, title = "Sucesso!", tipo, div = '#warnings', desaparecer = true) {
         var message = '<div id="message" class="alert alert-' + tipo + '"><strong>' + title
@@ -73,9 +94,10 @@
         return $(location).attr('href', '{{ url("' + url + '") }}');
     }
     $currentPerson = null;
+
     function getConversas(loading = 1) {
         console.log('obtendo conversas...');
-        var token, url;
+        var token, url, unreadMessages;
 
         token = $('input[name=_token]').val();
         url = "{{ url('/m/inbox') }}";
@@ -92,7 +114,7 @@
             success: function (response) {
                 var resposta = response.response;
                 console.log(response);
-                $('.pessoas').empty();
+                
 
                 if (loading === 1) {
                     $("#loadingpersons").hide();
@@ -102,24 +124,64 @@
                     message('Pedimos desculpa, ocorreu um erro, tente mais tarde. algumas informações: <br>' + response.error, 'Ups!', 'danger', '#warnings', false)
                     return false;
                 }
-
+                $('.pessoas').empty();
                 $.each(response.code, function (key, value) {
+                    if(value.thread.unreadMessages > 0){
+                        unreadMessages = true;
+                    }else{
+                        unreadMessages = false;
+                    }
+
                     var media = $("<div/>", {"class": "media"});
                     var div_image = $("<div/>", {"class": "pull-left"});
                     var image = $("<img/>", {"alt": "" + value.withUser.username + "", "class": "media-object person-image", "src": "#"});
                     var media_body = $("<div/>", {"class": "media-body"});
                     var content_media = $("<div/>", {"class": "content-media"});
+
+                    var tempo = $("<span/>", {"class": "time pull-right", "text": "" + value.thread.time + ""});
+                    
+                    if(unreadMessages){
+                        if(value.thread.unreadMessages > 9)
+                            var spanUnreadMessages = $("<span/>", {"class": "badge pull-right", "text": "+9", "style": "margin-top: 2px;"});
+                        else
+                            var spanUnreadMessages = $("<span/>", {"class": "badge pull-right", "text": "" + value.thread.unreadMessages+ "", "style": "margin-top: 2px;"});
+                        var textUnreadMessages  = $("<span/>", {"class": "pull-right", "text": "Nova(s)","style": "margin-left: 5px;"});
+                        
+                    }else{
+                        var spanUnreadMessages = null;
+                        var textUnreadMessages  = null;
+                    }
                     var tempo = $("<span/>", {"class": "time pull-right", "text": "" + value.thread.time + ""});
                     var name = $("<h5/>", {"class": "media-heading", "text": "" + value.withUser.username + ""});
                     var tr = $("<tr/>");
                     var td = $("<td/>");
+                    var td1 = $("<td/>", {"style": "width: 100%;"});
                     var ultima_mensagem = $("<small/>", {"class": "ultima-mensagem pull-left", "text": "" + value.thread.message + ""})
                     var pessoa = $("<div/>", {
                         "class": "list-group-item person",
                         "data-person": "" + value.withUser.id + "",
                         "data-conv": "" + value.thread.conversation_id + ""
-                    }).append(media.append(div_image.append(image)).append(media_body.append(content_media.append(tempo).append(name).append(tr.append(td.append(ultima_mensagem))))));
+                    }).append(
+                    media.append(
+                        div_image.append(image)
+                        ).append(
+                        media_body.append(
+                            content_media.append(tempo).append(name).append(
+                                tr.append(
+                                    td.append(ultima_mensagem)
+                                ).append(
+                                    td1.append(textUnreadMessages).append(spanUnreadMessages)
+                                )
+                            )
+                        )
+                    )
+                );
+                    if(unreadMessages){
+                        blinkBackground(value.thread.conversation_id);
+                        $blink = true;
+                    }
                     $('.pessoas').append(pessoa);
+
                 });
             }
         }).done(function () {
@@ -186,6 +248,7 @@
                 var messages = $("<div/>", {"class": "messages", "data-conv_id": "" + conv_id + ""});
 
                 $.each(response.code.messages, function (key, value) {
+                    console.log(value.is_seen);
                     var bubble_me = $("<div/>", {"class": "bubble-me", "id": "" + value.id + "", "text": "" + value.message + ""});
                     var bubble_you = $("<div/>", {"class": "bubble-you", "id": "" + value.id + "", "text": "" + value.message + ""});
                     if (value.me === true) {
@@ -213,10 +276,15 @@
 
         }
         $('.person').click(function () {
+
             $('.person').removeClass('active');
             $(this).addClass('active');
             $convId = $(this).attr("data-conv");
+            blinkBackground($convId);
+            $blink = false;
+            getConversas();
             getChat($convId);
+
         });
     }
 
@@ -228,10 +296,13 @@
             if (mensagem !== "" && $convId !== "") {
                 setMessage($convId, mensagem);
                 $('#input-mensagem').val("");
-                getChat($convId);
                 getConversas();
+                getConversas();
+                getChat($convId);
+                
             }
         });
+        
     });
 </script>
 @endsection
