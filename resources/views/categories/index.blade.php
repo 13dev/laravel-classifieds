@@ -4,7 +4,6 @@
 @section('extra-style','<link rel="stylesheet" href="assets/css/messages.css">')
 
 @section('content')
-
 <div class="container">     
     <div class="panel panel-primary">
         <div class="panel-heading">Editar categorias</div>

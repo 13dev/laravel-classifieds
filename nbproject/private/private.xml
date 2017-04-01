@@ -3,11 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/laragon/www/Laravel/resources/views/items/selectCategory.blade.php</file>
-            <file>file:/C:/laragon/www/Laravel/app/Http/Controllers/Ajax/CategoriesController.php</file>
-            <file>file:/C:/laragon/www/Laravel/.env</file>
-            <file>file:/C:/laragon/www/Laravel/resources/views/categories/index.blade.php</file>
-            <file>file:/C:/laragon/www/Laravel/routes/web.php</file>
+            <file>file:/C:/laragon/www/Laravel/app/Http/Controllers/Auth/SessionsController.php</file>
+            <file>file:/C:/laragon/www/Laravel/routes/api.php</file>
+            <file>file:/C:/laragon/www/Laravel/resources/views/messages/index.blade.php</file>
+            <file>file:/C:/laragon/www/Laravel/app/Http/Middleware/VerifyCsrfToken.php</file>
+            <file>file:/C:/laragon/www/Laravel/config/app.php</file>
+            <file>file:/C:/laragon/www/Laravel/app/Http/Kernel.php</file>
+            <file>file:/C:/laragon/www/Laravel/app/Http/Controllers/MessagesController.php</file>
         </group>
     </open-files>
 </project-private>

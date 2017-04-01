@@ -33,7 +33,6 @@ Route::get('password/reset/{token?}', 'Auth\PasswordController@showResetForm');
 Route::post('password/reset', 'Auth\PasswordController@reset');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'authorize']], function() {
-    
     // Index do painel de admin.
     Route::get('/', 'Admin\AdminController@index');
     Route::get('/', 'Admin\UsersController@index');

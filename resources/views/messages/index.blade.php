@@ -1,56 +1,82 @@
 @extends('layouts.app')
 
 @section('titulo','Mensagens')
-@section('extra-style','<link rel="stylesheet" href="assets/css/messages.css">')
+@section('extra-style','
+<link href="assets/css/messages.css" rel="stylesheet">
+    ')
 
 @section('content')
-<div class="row">
-    
-    <div id="warnings"></div>
-    <div class="col-md-4 all-persons">
-        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-        <div class="person-header">
-            <input type="text" id="search-conversations" class="form-control" placeholder="Procurar conversas...">
+    <div class="row">
+        <div id="warnings">
         </div>
-        <div id="loadingpersons">
-            <div class="loading-chat">
-                <i class="fa fa-refresh fa-spin fa-4x fa-fw"></i>
-                <span class="sr-only">Loading...</span><br>
-                <h4 class="text">A carregar...</h4>
+        <div class="col-md-4 all-persons">
+            <input name="_token" type="hidden" value="{{ csrf_token() }}"/>
+            <div class="person-header">
+                <input class="form-control" id="search-conversations" placeholder="Procurar conversas..." type="text">
+                </input>
             </div>
-        </div>
-        <div class="list-group pessoas"></div>
-    </div>
-    <div class="col-md-8 all-chat">
-        <div class="chat-header">Para: </div>
-        <div class="chat">
-            <div id="loading">
+            <div id="loadingpersons">
                 <div class="loading-chat">
-                    <i class="fa fa-refresh fa-spin fa-4x fa-fw"></i>
-                    <span class="sr-only">Loading...</span><br>
-                    <h4 class="text">A carregar...</h4>
-                </div>
-            </div>
-
-            <div class="messages">
-                <div id="messages">
-                    <img class="start-image" src="{{ url('/assets/img/conversation.png') }}" width="300" alt="Escolhe uma conversa!">
-                    <h3 style="opacity:0.4;text-align:center;"> Escolhe uma conversa :) </h3>
-                </div>	
-                <div class="inputs">
-                <div class="input-group">
-                    <input type="text" id="input-mensagem" class="form-control" placeholder="Search for...">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" id="enviar-mensagem">Enviar!</button>
+                    <i class="fa fa-refresh fa-spin fa-4x fa-fw">
+                    </i>
+                    <span class="sr-only">
+                        Loading...
                     </span>
+                    <br>
+                        <h4 class="text">
+                            A carregar...
+                        </h4>
+                    </br>
                 </div>
             </div>
+            <div class="list-group pessoas">
+            </div>
+        </div>
+        <div class="col-md-8 all-chat">
+            <div class="chat-header">
+                Para:
+            </div>
+            <div class="chat">
+                <div id="loading">
+                    <div class="loading-chat">
+                        <i class="fa fa-refresh fa-spin fa-4x fa-fw">
+                        </i>
+                        <span class="sr-only">
+                            Loading...
+                        </span>
+                        <br>
+                            <h4 class="text">
+                                A carregar...
+                            </h4>
+                        </br>
+                    </div>
+                </div>
+                <div class="messages">
+                    <div id="messages">
+                        <img alt="Escolhe uma conversa!" class="start-image" src="{{ url('/assets/img/conversation.png') }}" width="300">
+                            <h3 style="opacity:0.4;text-align:center;">
+                                Escolhe uma conversa :)
+                            </h3>
+                        </img>
+                    </div>
+                    <div class="inputs">
+                        <div class="input-group">
+                            <input class="form-control" id="input-mensagem" placeholder="Search for..." type="text">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" id="enviar-mensagem" type="button">
+                                        Enviar!
+                                    </button>
+                                </span>
+                            </input>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div style="height: 50px;"></div>
-</div>
+    <div style="height: 50px;">
+    </div>
+</link>
 @endsection
 
 
