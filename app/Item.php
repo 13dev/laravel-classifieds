@@ -7,6 +7,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 
 class Item extends Model {
 
+
     use Sluggable;
 
     /**
