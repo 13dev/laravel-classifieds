@@ -2,14 +2,15 @@
 
 use Illuminate\Database\Seeder;
 
-class CategoryTableSeeder extends Seeder {
-
+class CategoryTableSeeder extends Seeder
+{
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run() {
+    public function run()
+    {
         $faker = Faker\Factory::create();
         for ($i = 0; $i < 20; $i++) {
             DB::table('categories')->insert([
@@ -18,5 +19,4 @@ class CategoryTableSeeder extends Seeder {
             ]);
         }
     }
-
 }

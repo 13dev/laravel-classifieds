@@ -3,8 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Support\Facades\Auth;
 
 class Authenticate
 {
@@ -25,7 +25,7 @@ class Authenticate
                 return redirect()->guest('login');
             }
         }
-        
+
         return $next($request);
     }
 }

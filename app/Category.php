@@ -2,19 +2,17 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use DB;
-use Cache;
+use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model {
-
+class Category extends Model
+{
     public $fillable = ['title', 'parent_id'];
     // identa a tree criada por getAllCHilds()
-    private $levelIdentifier = "&nbsp;&nbsp;";
+    private $levelIdentifier = '&nbsp;&nbsp;';
     // so para criar a tree de categorias!
-    private $itemPointer = "|-";
-    // guarda todos os filhos 
+    private $itemPointer = '|-';
+    // guarda todos os filhos
     private $allChilds = [];
     // guarda o caminho de um item!
     private $itemPath = [];
@@ -24,39 +22,44 @@ class Category extends Model {
      *
      * @return string
      */
-    public function childs() {
+    public function childs()
+    {
         return $this->hasMany('App\Category', 'parent_id', 'id');
     }
 
-    public function items() {
+    public function items()
+    {
         return $this->hasMany('App\Item', 'category_id');
     }
 
     /**
-     * Obtem um filho de cada vez
-     * @param  integer $parent_id este parametro é o parent_id do pretendido
+     * Obtem um filho de cada vez.
+     * @param  int $parent_id este parametro é o parent_id do pretendido
      * @return collection     retorna o filho
      */
-    public static function getImmediateChilds($parent_id) {
+    public static function getImmediateChilds($parent_id)
+    {
         $childs = DB::table('categories')->where('parent_id', $parent_id)->orderBy('id')->get();
+
         return $childs;
     }
 
     /**
-     * obtem a lista de categoriasd
-     * @param  integer $parent_id       id do parente
+     * obtem a lista de categoriasd.
+     * @param  int $parent_id       id do parente
      * @param  string  $levelIdentifier indentificador do nivel
-     * @param  boolean $start           V - retorna | F - não retorna
-     * @return collection                   
+     * @param  bool $start           V - retorna | F - não retorna
+     * @return collection
      */
-    public function getAllChilds($parent_id, $levelIdentifier = "", $start = true) {
+    public function getAllChilds($parent_id, $levelIdentifier = '', $start = true)
+    {
         $immediateChilds = $this->getImmediateChilds($parent_id);
 
         if (count($immediateChilds)) {
             foreach ($immediateChilds as $chld) {
-                $chld->title = $levelIdentifier . $this->itemPointer . $chld->title;
+                $chld->title = $levelIdentifier.$this->itemPointer.$chld->title;
                 array_push($this->allChilds, $chld);
-                $this->getAllChilds($chld->id, ($levelIdentifier . $this->levelIdentifier), false);
+                $this->getAllChilds($chld->id, ($levelIdentifier.$this->levelIdentifier), false);
             }
         }
         if ($start) {
@@ -64,7 +67,8 @@ class Category extends Model {
         }
     }
 
-    public function getItemPath($item_id, $start = true) {
+    public function getItemPath($item_id, $start = true)
+    {
         if ($item_id != 0) {
             $item = DB::table('categories')->where('id', $item_id);
             $itemdata = $item->first();
@@ -81,11 +85,12 @@ class Category extends Model {
                 }
             }
         }
+
         return $this->itemPath;
     }
 
-    public function deleteItem($id) {
-
+    public function deleteItem($id)
+    {
         $immediate_childs = $this->getAllChilds($id);
         foreach ($immediate_childs as $key => $value) {
             $item = DB::table('categories')->where('id', $value->id)->delete();
@@ -97,15 +102,17 @@ class Category extends Model {
         if ($item == 0) {
             return false;
         }
+
         return true;
     }
 
-    public function haveChilds($id) {
+    public function haveChilds($id)
+    {
         $immediateChilds = $this->getAllChilds($id);
         if (empty($immediateChilds)) {
             return false;
         }
+
         return true;
     }
-
 }

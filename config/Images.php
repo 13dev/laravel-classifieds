@@ -1,6 +1,6 @@
-<?php 
+<?php
+
 
 return [
-	'maxFilesAllow' => 5
+    'maxFilesAllow' => 5,
 ];
-

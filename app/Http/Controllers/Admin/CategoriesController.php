@@ -9,10 +9,11 @@
 namespace App\Http\Controllers\Admin;
 
 /**
- * Description of CategoriesController
+ * Description of CategoriesController.
  *
  * @author 13dev <qwerty124563@gmail.com>
  */
-class CategoriesController {
+class CategoriesController
+{
     //put your code here
 }

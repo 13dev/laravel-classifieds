@@ -32,23 +32,23 @@ Route::post('password/email', 'Auth\PasswordController@postEmail');
 Route::get('password/reset/{token?}', 'Auth\PasswordController@showResetForm');
 Route::post('password/reset', 'Auth\PasswordController@reset');
 
-Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'authorize']], function() {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'authorize']], function () {
     // Index do painel de admin.
     Route::get('/', 'Admin\AdminController@index');
     Route::get('/', 'Admin\UsersController@index');
-    
+
     // Categorias
     Route::get('/category', [
-        'uses' => 'CategoriesController@manageCategory'
+        'uses' => 'CategoriesController@manageCategory',
     ]);
     Route::post('/add-category', [
-        'uses' => 'CategoriesController@addCategory'
+        'uses' => 'CategoriesController@addCategory',
     ])->name('addCategory');
 
     Route::post('/delete-category', [
-        'uses' => 'CategoriesController@deleteCategory'
+        'uses' => 'CategoriesController@deleteCategory',
     ])->name('deleteCategory');
-    
+
     // Admin Users
     Route::get('/users', 'Admin\UsersController@index');
     Route::get('/user/add', 'Admin\UsersController@create');
@@ -82,7 +82,7 @@ Route::get('/u/{username}', 'UserController@index');
 
 Route::get('/a/{slug}', 'ItemController@show');
 
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => 'auth'], function () {
     Route::get('/perfil', 'UserController@getEditar');
     Route::post('/perfil', 'UserController@postEditar');
     /*

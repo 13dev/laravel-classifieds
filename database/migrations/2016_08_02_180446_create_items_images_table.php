@@ -21,7 +21,6 @@ class CreateItemsImagesTable extends Migration
                     ->onDelete('cascade');
             $table->string('path');
             $table->timestamps();
-
         });
     }
 

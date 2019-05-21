@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateMessagesTable extends Migration
@@ -21,7 +20,6 @@ class CreateMessagesTable extends Migration
             $tbl->integer('user_id');
             $tbl->integer('conversation_id');
             $tbl->timestamps();
-
         });
     }
 
