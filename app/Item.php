@@ -5,7 +5,8 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 
-class Item extends Model {
+class Item extends Model
+{
     use Sluggable;
 
     /**
@@ -14,18 +15,21 @@ class Item extends Model {
      * @var array
      */
     protected $fillable = [
-        'user_id', 'titulo', 'descricao', 'category_id'
+        'user_id', 'titulo', 'descricao', 'category_id',
     ];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo('App\User');
     }
 
-    public function images() {
+    public function images()
+    {
         return $this->hasMany('App\ItemImages');
     }
 
-    public function category() {
+    public function category()
+    {
         return $this->belongsTo('App\Category', 'category_id');
     }
 
@@ -34,12 +38,12 @@ class Item extends Model {
      *
      * @return array
      */
-    public function sluggable() {
+    public function sluggable()
+    {
         return [
             'slug' => [
-                'source' => 'titulo'
-            ]
+                'source' => 'titulo',
+            ],
         ];
     }
-
 }

@@ -1,55 +1,58 @@
-<?php namespace App\Http\Controllers;
+<?php
 
-use Illuminate\Http\Request;
-use App\Http\Requests;
-use App\User;
-use App\Item;
+namespace App\Http\Controllers;
+
 use Auth;
-use Hash;
+use App\User;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-	public function __construct() {
-		$this->middleware('auth', ['except' => 'index']);
-	}
-	public function index($username) {
-		$user = User::where('username','=',$username)->first();
-		if (!$user) {
-			return abort(404);
-		}
-		return view('user.index')
-				->with('user',$user);
-	}
-	public function getEditar(){
-		return view('user.edit')
-				->with('user', Auth::user());
-	}
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => 'index']);
+    }
 
-	public function postEditar(request $request){
+    public function index($username)
+    {
+        $user = User::where('username', '=', $username)->first();
+        if (! $user) {
+            return abort(404);
+        }
 
-		$this->validate($request, [
-			'name'      => 'min:3|max:20|alpha',
-			'last_name' => 'min:3|max:20|alpha',
-			'email'     => 'email|max:255|unique:users,email,'.\Auth::user()->id,
-			'password'  => 'min:6|confirmed',
-		]);
+        return view('user.index')
+                ->with('user', $user);
+    }
 
-		$fields = [
-			'name' 		=> htmlspecialchars($request->input('name')),
-			'last_name' => htmlspecialchars($request->input('last_name')),
-			'email' 	=> htmlspecialchars($request->input('email')),
-			'password' 	=> $request->input('password'),
-		];
+    public function getEditar()
+    {
+        return view('user.edit')
+                ->with('user', Auth::user());
+    }
 
-		$fields = array_filter($fields, 'strlen');
-		$fields = array_filter($fields, 'trim');
-		
-		// Atualizar utulizador
-		Auth::user()->update($fields);
-		
+    public function postEditar(request $request)
+    {
+        $this->validate($request, [
+            'name'      => 'min:3|max:20|alpha',
+            'last_name' => 'min:3|max:20|alpha',
+            'email'     => 'email|max:255|unique:users,email,'.\Auth::user()->id,
+            'password'  => 'min:6|confirmed',
+        ]);
 
-		return redirect('/perfil')
-				->with(session()->flash('message', trans('messages.success.perfil.update')));
+        $fields = [
+            'name' 		=> htmlspecialchars($request->input('name')),
+            'last_name' => htmlspecialchars($request->input('last_name')),
+            'email' 	=> htmlspecialchars($request->input('email')),
+            'password' 	=> $request->input('password'),
+        ];
 
-	}
+        $fields = array_filter($fields, 'strlen');
+        $fields = array_filter($fields, 'trim');
+
+        // Atualizar utulizador
+        Auth::user()->update($fields);
+
+        return redirect('/perfil')
+                ->with(session()->flash('message', trans('messages.success.perfil.update')));
+    }
 }

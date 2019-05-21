@@ -1,8 +1,9 @@
 <?php
+
 return [
     'user' => [
         'table' => 'users',
         'model' => 'App\User',
-        'columns' => ['id', 'name','username']
-    ]
+        'columns' => ['id', 'name', 'username'],
+    ],
 ];

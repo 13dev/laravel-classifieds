@@ -2,14 +2,12 @@
 
 namespace App;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-
-class User extends Authenticatable 
+class User extends Authenticatable
 {
-
     use Notifiable;
 
     /**
@@ -18,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-    'name', 'email', 'username', 'last_name', 'password'
+    'name', 'email', 'username', 'last_name', 'password',
     ];
 
     /**
@@ -30,16 +28,17 @@ class User extends Authenticatable
     'remember_token',
     ];
 
-    public static function boot() {
-
+    public static function boot()
+    {
         parent::boot();
-        
-        static::creating(function($user) {
+
+        static::creating(function ($user) {
             $user->emailtoken = str_random(36);
         });
     }
 
-    public function confirmEmail() {
+    public function confirmEmail()
+    {
         $this->verified = true;
         $this->emailtoken = null;
         $this->save();
@@ -47,7 +46,7 @@ class User extends Authenticatable
 
     public function setPasswordAttribute($password)
     {
-        if(Hash::needsRehash($password)) {
+        if (Hash::needsRehash($password)) {
             $password = bcrypt($password);
         }
         $this->attributes['password'] = $password;
@@ -57,5 +56,4 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Item');
     }
-
 }
